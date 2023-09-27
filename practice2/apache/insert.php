@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Insert</title>
+    <title>INSERT</title>
 </head>
 <body>
     <form method="POST">
@@ -14,7 +14,6 @@
     </form>
 <?php 
 if(isset($_POST['submit'])) {
-  	//getting the post values
     $name=$_POST['name'];
     $price=$_POST['price'];
 
@@ -28,8 +27,9 @@ if(isset($_POST['submit'])) {
     } else {
         echo "<script>alert('Something Went Wrong. Please try again');</script>";
     }
-}
 
+    mysqli_close($mysqli);
+}
 ?>
 </body>
 </html>

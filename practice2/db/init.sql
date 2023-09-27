@@ -1,6 +1,6 @@
 CREATE DATABASE IF NOT EXISTS appDB;
 CREATE USER IF NOT EXISTS 'user'@'%' IDENTIFIED BY 'password';
-GRANT SELECT,UPDATE,INSERT ON appDB.* TO 'user'@'%';
+GRANT SELECT,UPDATE,INSERT,DELETE ON appDB.* TO 'user'@'%';
 FLUSH PRIVILEGES;
 
 USE appDB;
@@ -14,3 +14,4 @@ CREATE TABLE IF NOT EXISTS products (
 INSERT INTO products (name, price) 
 VALUES ('Shampoo', 148),
 ('Coconut', 50);
+
