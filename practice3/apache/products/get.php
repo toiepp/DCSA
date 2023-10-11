@@ -3,12 +3,11 @@ include("../config.php");
 
 global $entity;
 
-$get_all_option = 0;
-$id = isset($_GET["id"]) ? intval($_GET["id"]) : $get_all_option;
+$id = isset($_GET["id"]) ? intval($_GET["id"]) : 0;
 
 $result = null;
 
-if ($id == $get_all_option) {
+if ($id == 0) {
     $request = $mysqli->query("SELECT * FROM $entity WHERE id");
     $result = $request->fetch_all(MYSQLI_ASSOC);
 } else {
