@@ -5,6 +5,8 @@ global $mysqli;
 
 $product = json_decode(file_get_contents('php://input'), false);
 
+
+
 $instruction = "INSERT INTO $entity (" .
             (isset($product->id) ? "id," : "") .
             " name, price) VALUES (" . 
