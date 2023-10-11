@@ -1,5 +1,5 @@
 <?php 
-include("config.php");
+include("../config.php");
 
 global $entity;
 
@@ -12,7 +12,7 @@ if ($id == $get_all_option) {
     $request = $mysqli->query("SELECT * FROM $entity WHERE id");
     $result = $request->fetch_all(MYSQLI_ASSOC);
 } else {
-    $request = $conn->query("SELECT * FROM $entity WHERE id=$id");
+    $request = $mysqli->query("SELECT * FROM $entity WHERE id=$id");
     $result = $request->fetch_assoc();
 }
 
