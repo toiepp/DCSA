@@ -7,10 +7,3 @@ RUN docker-php-ext-install mysqli && \
     apt-get update && \
     apt-get install -y libaprutil1-dbd-mysql && \
     service apache2 restart
-
-# COPY . .
-
-# RUN echo "ServerName localhost" >> /etc/apache2/000-default.conf
-# RUN service apache2 restart
-
-
