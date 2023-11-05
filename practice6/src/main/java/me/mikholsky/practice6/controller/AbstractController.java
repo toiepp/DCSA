@@ -1,6 +1,7 @@
 package me.mikholsky.practice6.controller;
 
 import me.mikholsky.practice6.entity.AbstractEntity;
+import me.mikholsky.practice6.repository.CommonRepository;
 import me.mikholsky.practice6.service.CommonService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

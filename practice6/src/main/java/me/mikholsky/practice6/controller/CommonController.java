@@ -5,16 +5,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 public interface CommonController<E extends AbstractEntity> {
-    @GetMapping({"", "/"})
+    @GetMapping
     ResponseEntity<Iterable<E>> findAll();
 
     @GetMapping("/{id}")
     ResponseEntity<E> findById(@PathVariable Long id);
 
-    @PostMapping({"", "/"})
+    @PostMapping
     ResponseEntity<E> save(E e);
 
-    @PutMapping({"", "/"})
+    @PutMapping
     void update(E e);
 
     @DeleteMapping("/{id}")

@@ -1,5 +1,6 @@
 package me.mikholsky.practice6.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -23,7 +24,7 @@ public class Order extends AbstractEntity {
     @Enumerated(EnumType.STRING)
     private OrderStatus status;
 
-    @JsonIgnoreProperties({""})
+    @JsonIgnore
     @OneToMany(
             mappedBy = "order",
             cascade = CascadeType.ALL,

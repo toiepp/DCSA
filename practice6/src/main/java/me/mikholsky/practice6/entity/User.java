@@ -1,5 +1,6 @@
 package me.mikholsky.practice6.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -16,13 +17,13 @@ public class User extends AbstractEntity {
     @Basic(optional = false)
     private String name;
 
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnore
     @OneToMany(mappedBy = "user",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
     private List<CartRow> cart = new ArrayList<>();
 
-    @JsonIgnoreProperties({"user"})
+    @JsonIgnore
     @OneToMany(mappedBy = "user")
     private List<Order> orders = new ArrayList<>();
 }

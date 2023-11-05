@@ -5,7 +5,7 @@ import me.mikholsky.practice6.repository.CommonRepository;
 
 import java.util.List;
 
-public interface CommonService<E extends AbstractEntity, R extends CommonRepository<E>> {
+public interface CommonService<E extends AbstractEntity> {
     List<E> findAll();
 
     E findById(Long id);

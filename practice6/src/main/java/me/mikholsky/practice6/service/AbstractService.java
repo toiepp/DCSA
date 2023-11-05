@@ -7,7 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import java.util.List;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
-        implements CommonService<E, R> {
+        implements CommonService<E> {
     private R repository;
 
     @Autowired
