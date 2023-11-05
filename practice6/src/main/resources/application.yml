@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    username: mikholskiy
+    password: spflmk7q
+    url: jdbc:postgresql://localhost:5432/ecommerce
+    driver-class-name: org.postgresql.Driver
+springdoc:
+  api-docs:
+    enabled: true
+    path: /swagger-ui.html

@@ -2,20 +2,19 @@ package me.mikholsky.practice6.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
-
-import java.math.BigDecimal;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "products")
 @Data
-public class Product {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+@EqualsAndHashCode(callSuper = true)
+public class Product extends AbstractEntity {
     @Basic(optional = false)
     private String name;
 
-    private BigDecimal price;
+    @Basic(optional = false)
+    private double price;
+
+    @Basic(optional = false)
+    private int amount;
 }

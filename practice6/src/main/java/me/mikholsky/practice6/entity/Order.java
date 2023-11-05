@@ -1,41 +1,33 @@
 package me.mikholsky.practice6.entity;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "orders")
 @Data
-public class Order {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @JsonFormat(pattern = "dd/MM/yyyy")
-    private LocalDate dateCreated;
-
-    @OneToMany(mappedBy = "pk.order")
-    private List<OrderProduct> orderProducts = new ArrayList<>();
-
+@EqualsAndHashCode(callSuper = true)
+public class Order extends AbstractEntity {
     @Transient
-    public BigDecimal getTotalPrice() {
-        BigDecimal bd = new BigDecimal("0");
-        List<OrderProduct> orderProductList = getOrderProducts();
-        for (var op : orderProductList) {
-            bd = bd.add(op.getTotalPrice());
-        }
+    private double total;
 
-        return bd;
-    }
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
-    @Transient
-    public int getNumberOfProducts() {
-        return this.orderProducts.size();
-    }
+    @Enumerated(EnumType.STRING)
+    private OrderStatus status;
+
+    @JsonIgnoreProperties({""})
+    @OneToMany(
+            mappedBy = "order",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<OrderRow> products = new ArrayList<>();
 }
