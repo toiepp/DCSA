@@ -57,4 +57,8 @@ public class User extends AbstractEntity {
     public void removeFromCart(Product product) {
         cart.removeIf(row -> row.getProduct().equals(product));
     }
+
+    public void clearCart() {
+        this.cart.clear();
+    }
 }
