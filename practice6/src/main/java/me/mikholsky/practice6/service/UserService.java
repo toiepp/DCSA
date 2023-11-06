@@ -1,14 +1,13 @@
 package me.mikholsky.practice6.service;
 
 import jakarta.transaction.Transactional;
-import me.mikholsky.practice6.entity.CartRow;
+import me.mikholsky.practice6.controller.dto.CartDto;
+import me.mikholsky.practice6.controller.dto.CartRowDto;
 import me.mikholsky.practice6.entity.User;
 import me.mikholsky.practice6.repository.ProductRepository;
 import me.mikholsky.practice6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -23,6 +22,13 @@ public class UserService extends AbstractService<User, UserRepository> {
     public UserService setProductRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
         return this;
+    }
+
+    public CartDto showCart(Long id) {
+        var user = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException(String.format("No such user with ID %d", id)));
+
+        return CartDto.from(user.getCart().stream().map(CartRowDto::from).toList());
     }
 
     public User addToCart(Long userId, Long productId, int quantity) {
