@@ -3,17 +3,25 @@ package me.mikholsky.practice6.service;
 import jakarta.transaction.Transactional;
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.CartRowDto;
-import me.mikholsky.practice6.entity.Product;
-import me.mikholsky.practice6.entity.User;
+import me.mikholsky.practice6.controller.dto.OrderDto;
+import me.mikholsky.practice6.controller.dto.UserDto;
+import me.mikholsky.practice6.entity.*;
+import me.mikholsky.practice6.exception.NotEnoughInStorageException;
+import me.mikholsky.practice6.repository.OrderRepository;
 import me.mikholsky.practice6.repository.ProductRepository;
 import me.mikholsky.practice6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional
 public class UserService extends AbstractService<User, UserRepository> {
     private ProductRepository productRepository;
+
+    private OrderRepository orderRepository;
 
     public UserService(UserRepository repository) {
         super(repository);
@@ -22,6 +30,12 @@ public class UserService extends AbstractService<User, UserRepository> {
     @Autowired
     public UserService setProductRepository(ProductRepository productRepository) {
         this.productRepository = productRepository;
+        return this;
+    }
+
+    @Autowired
+    public UserService setOrderRepository(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
         return this;
     }
 
@@ -43,10 +57,12 @@ public class UserService extends AbstractService<User, UserRepository> {
         }
 
         if (quantity == 0) {
-           removeFromCart(user, product);
+            removeFromCart(user, product);
         } else {
             user.addToCart(product, quantity);
         }
+
+        repository.save(user);
 
         return user;
     }
@@ -62,5 +78,62 @@ public class UserService extends AbstractService<User, UserRepository> {
         user.clearCart();
 
         return user;
+    }
+
+    public OrderDto findOrderById(Long userId, Long orderId) {
+        var user = findById(userId);
+
+        var order = user.getOrders().stream().filter(o -> o.getId().equals(orderId)).findAny().orElse(null);
+
+        if (order == null) {
+            throw new IllegalArgumentException("No orders found");
+        }
+        return OrderDto.from(user, order);
+    }
+
+    // TODO сделать уменьшение кол-ва хранимого товара на складе если заказ оформлен успешно
+    public OrderDto checkout(Long id) throws NotEnoughInStorageException {
+        var user = findById(id);
+
+        var impossible = getListOfImpossibleToCheckout(user.getCart());
+
+        if (impossible.size() != 0) {
+            throw new NotEnoughInStorageException("You are can't order more then we have!");
+        }
+
+        Order order = new Order();
+        order.setStatus(OrderStatus.CREATED);
+        order.setUser(user);
+
+        orderRepository.save(order);
+
+        var orderContent = user.getCart().stream().map(cartRow -> {
+            OrderRowId orderId = new OrderRowId();
+            orderId.setOrderId(order.getId());
+            orderId.setProductId(cartRow.getProduct().getId());
+
+            OrderRow orderRow = new OrderRow();
+            orderRow.setId(orderId);
+            orderRow.setOrder(order);
+            orderRow.setProduct(cartRow.getProduct());
+            orderRow.setQuantity(cartRow.getQuantity());
+
+            cartRow.getProduct().setAmount(cartRow.getProduct().getAmount() - cartRow.getQuantity());
+
+            return orderRow;
+        }).toList();
+
+        order.setProducts(orderContent);
+        user.getOrders().add(order);
+
+        user.clearCart();
+
+        return OrderDto.from(user, order);
+    }
+
+    private List<CartRow> getListOfImpossibleToCheckout(List<CartRow> cart) {
+        return cart.stream()
+                .filter(row -> row.getQuantity() > row.getProduct().getAmount())
+                .toList();
     }
 }

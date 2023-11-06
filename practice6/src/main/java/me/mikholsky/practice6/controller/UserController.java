@@ -4,10 +4,14 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import me.mikholsky.practice6.controller.dto.CartDto;
+import me.mikholsky.practice6.controller.dto.OrderDto;
 import me.mikholsky.practice6.controller.dto.UserDto;
 import me.mikholsky.practice6.entity.User;
+import me.mikholsky.practice6.exception.NotEnoughInStorageException;
 import me.mikholsky.practice6.service.UserService;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,5 +55,27 @@ public class UserController extends AbstractController<User, UserService> {
         var user = service.addToCart(userId, prodId, 0);
 
         return ResponseEntity.ok(UserDto.from(user));
+    }
+
+    @GetMapping("/{userId}/order/{orderId}")
+    public ResponseEntity<OrderDto> showOrder(@PathVariable Long userId,
+                                              @PathVariable Long orderId) {
+        var order = service.findOrderById(userId, orderId);
+
+        return ResponseEntity.ok(order);
+    }
+
+    @PostMapping("/{userId}/order")
+    @Operation(summary = "Checkout order")
+    public ResponseEntity<OrderDto> checkout(@PathVariable Long userId) {
+        OrderDto order = null;
+        try {
+            order = service.checkout(userId);
+        } catch (NotEnoughInStorageException e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+
+        return ResponseEntity.ok(order);
     }
 }

@@ -30,9 +30,12 @@ public class User extends AbstractEntity {
     private List<Order> orders = new ArrayList<>();
 
     public void addToCart(Product product, int quantity) {
+        // Вариант что надо новый подукт добавить
+        // Или добавить указанное количество к уже существующему
+
         var productInCart = cart.stream()
-                .filter(cartRow -> cartRow.getProduct().equals(product))
-                .findAny()
+                .filter(cartRow -> cartRow.getProduct().getId().equals(product.getId()))
+                .findFirst()
                 .orElseGet(() -> {
                     var res = new CartRow();
 
@@ -43,15 +46,24 @@ public class User extends AbstractEntity {
                     res.setId(cartRowId);
                     res.setUser(User.this);
                     res.setProduct(product);
-                    res.setQuantity(quantity);
+                    res.setQuantity(0);
 
                     return res;
                 });
 
-        productInCart.setQuantity(quantity);
+        var amountInCart = productInCart.getQuantity();
 
-
-        cart.add(productInCart);
+        if (amountInCart == 0) {
+            productInCart.setQuantity(quantity);
+            cart.add(productInCart);
+        } else {
+            productInCart.setQuantity(quantity);
+            this.cart.stream()
+                    .filter(r -> r.getProduct().getId().equals(productInCart.getProduct().getId()))
+                    .findFirst()
+                    .get()
+                    .setQuantity(amountInCart + quantity);
+        }
     }
 
     public void removeFromCart(Product product) {
