@@ -1,8 +1,10 @@
+server:
+  port: 8181
 spring:
   datasource:
-    username: mikholskiy
-    password: spflmk7q
-    url: jdbc:postgresql://localhost:5432/ecommerce
+    username: ecommerce_user
+    password: ecommerce_password
+    url: jdbc:postgresql://db:5432/ecommerce_db
     driver-class-name: org.postgresql.Driver
   jackson:
     serialization:
