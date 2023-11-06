@@ -9,7 +9,7 @@ import org.springframework.http.ResponseEntity;
 
 public abstract class AbstractController<E extends AbstractEntity, S extends CommonService<E>>
         implements CommonController<E> {
-    private S service;
+    protected S service;
 
     @Autowired
     public AbstractController(S service) {
