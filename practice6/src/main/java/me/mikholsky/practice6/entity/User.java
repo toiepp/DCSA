@@ -8,6 +8,7 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 @Entity
 @Table(name = "users")
@@ -30,17 +31,28 @@ public class User extends AbstractEntity {
     private List<Order> orders = new ArrayList<>();
 
     public void addToCart(Product product, int quantity) {
-        CartRowId cartRowId = new CartRowId();
-        cartRowId.setUserId(this.getId());
-        cartRowId.setProductId(product.getId());
+        var productInCart = cart.stream()
+                .filter(cartRow -> cartRow.getProduct().equals(product))
+                .findAny()
+                .orElseGet(() -> {
+                    var res = new CartRow();
 
-        CartRow cartRow = new CartRow();
-        cartRow.setId(cartRowId);
-        cartRow.setUser(this);
-        cartRow.setProduct(product);
-        cartRow.setQuantity(quantity);
+                    CartRowId cartRowId = new CartRowId();
+                    cartRowId.setUserId(User.this.getId());
+                    cartRowId.setProductId(product.getId());
 
-        cart.add(cartRow);
+                    res.setId(cartRowId);
+                    res.setUser(User.this);
+                    res.setProduct(product);
+                    res.setQuantity(quantity);
+
+                    return res;
+                });
+
+        productInCart.setQuantity(quantity);
+
+
+        cart.add(productInCart);
     }
 
     public void removeFromCart(Product product) {
