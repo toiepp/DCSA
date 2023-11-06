@@ -3,11 +3,15 @@ package me.mikholsky.practice6.service;
 import jakarta.transaction.Transactional;
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.CartRowDto;
+import me.mikholsky.practice6.entity.CartRow;
+import me.mikholsky.practice6.entity.Product;
 import me.mikholsky.practice6.entity.User;
 import me.mikholsky.practice6.repository.ProductRepository;
 import me.mikholsky.practice6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.function.Predicate;
 
 @Service
 @Transactional
@@ -41,8 +45,16 @@ public class UserService extends AbstractService<User, UserRepository> {
             throw new IllegalArgumentException("There are only " + product.getAmount() + " of requested product left in storage");
         }
 
-        user.addToCart(product, quantity);
+        if (quantity == 0) {
+           removeFromCart(user, product);
+        } else {
+            user.addToCart(product, quantity);
+        }
 
         return user;
+    }
+
+    public void removeFromCart(User user, Product product) {
+        user.removeFromCart(product);
     }
 }

@@ -8,7 +8,6 @@ import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Entity
 @Table(name = "users")
@@ -56,10 +55,6 @@ public class User extends AbstractEntity {
     }
 
     public void removeFromCart(Product product) {
-        var toDel = cart.stream()
-                .filter(cartRow -> cartRow.getProduct().equals(product))
-                .findFirst().orElseThrow(IllegalArgumentException::new);
-
-        cart.remove(toDel);
+        cart.removeIf(row -> row.getProduct().equals(product));
     }
 }
