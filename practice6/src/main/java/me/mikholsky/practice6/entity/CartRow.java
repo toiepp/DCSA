@@ -1,5 +1,6 @@
 package me.mikholsky.practice6.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +11,7 @@ public class CartRow {
     @EmbeddedId
     private CartRowId id;
 
+    @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY)
     @MapsId("userId")
     private User user;

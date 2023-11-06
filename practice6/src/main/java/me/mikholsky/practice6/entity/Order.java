@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,6 +14,7 @@ import java.util.List;
 @Table(name = "orders")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@ToString(exclude = {"products"})
 public class Order extends AbstractEntity {
     @Transient
     private double total;

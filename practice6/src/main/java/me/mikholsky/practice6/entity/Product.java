@@ -3,6 +3,7 @@ package me.mikholsky.practice6.entity;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Entity
 @Table(name = "products")
