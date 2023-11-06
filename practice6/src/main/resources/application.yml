@@ -4,6 +4,9 @@ spring:
     password: spflmk7q
     url: jdbc:postgresql://localhost:5432/ecommerce
     driver-class-name: org.postgresql.Driver
+  jackson:
+    serialization:
+      fail-on-empty-beans: false
 springdoc:
   api-docs:
     enabled: true
