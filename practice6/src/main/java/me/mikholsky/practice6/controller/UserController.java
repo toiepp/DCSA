@@ -1,10 +1,10 @@
 package me.mikholsky.practice6.controller;
 
 import me.mikholsky.practice6.controller.dto.CartDto;
+import me.mikholsky.practice6.controller.dto.UserDto;
 import me.mikholsky.practice6.entity.User;
 import me.mikholsky.practice6.service.UserService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -22,19 +22,19 @@ public class UserController extends AbstractController<User, UserService> {
     }
 
     @PostMapping("/{userId}/cart/{prodId}")
-    public ResponseEntity<User> addProductToCart(@PathVariable Long userId,
+    public ResponseEntity<UserDto> addProductToCart(@PathVariable Long userId,
                                                  @PathVariable Long prodId,
                                                  @RequestParam int quantity) {
         var user = service.addToCart(userId, prodId, quantity);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserDto.from(user));
     }
 
     @DeleteMapping("/{userId}/cart/producd/{prodId}")
-    public ResponseEntity<User> removeFromCart(@PathVariable Long userId,
-                                               @PathVariable Long prodId) {
+    public ResponseEntity<UserDto> removeFromCart(@PathVariable Long userId,
+                                                  @PathVariable Long prodId) {
         var user = service.addToCart(userId, prodId, 0);
 
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok(UserDto.from(user));
     }
 }
