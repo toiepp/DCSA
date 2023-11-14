@@ -41,11 +41,9 @@ public class SecurityConfiguration {
 
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        var provider = new DaoAuthenticationProvider();
+        var provider = new DaoAuthenticationProvider(passwordEncoder());
 
         provider.setUserDetailsService(userDetailsService);
-
-        provider.setPasswordEncoder(passwordEncoder());
 
         return provider;
     }
@@ -63,6 +61,12 @@ public class SecurityConfiguration {
                         request
                                 .requestMatchers("/auth/**")
                                 .permitAll()
+                                .requestMatchers("/api/**")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers("/user/seller/**")
+                                .hasAnyAuthority("SELLER", "ADMIN")
+                                .requestMatchers("/user/**")
+                                .hasAnyAuthority("USER", "SELLER", "ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
