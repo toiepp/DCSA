@@ -21,6 +21,9 @@ services:
     links:
       - "db:database"
       - "db:db-server"
+    environment:
+      - AUTH_SERVER_URL=http://auth-server:8282
+      - COOKIE_MAX_AGE=300
   db:
     image: postgres:16.0-alpine
     container_name: server-db
