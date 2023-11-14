@@ -2,13 +2,18 @@ package me.mikholsky.practice6.controller;
 
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.OrderDto;
+import me.mikholsky.practice6.controller.dto.ProductDto;
 import me.mikholsky.practice6.controller.dto.UserDto;
+import me.mikholsky.practice6.entity.Product;
 import me.mikholsky.practice6.exception.NotEnoughInStorageException;
 import me.mikholsky.practice6.service.UserService;
+import org.apache.logging.log4j.util.ProcessIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/user")
@@ -64,4 +69,23 @@ public class UserController {
      *   1. Добавлять новые товары на маркетплейс
      *   2. Удалять только свои товары с маркетплейса */
 
+    @GetMapping("/product")
+    public ResponseEntity<List<ProductDto>> showSellingProducts() {
+        List<ProductDto> dtos = userService.showSellingProducts().stream().map(ProductDto::from).toList();
+
+        return ResponseEntity.ok(dtos);
+    }
+
+    @PostMapping("/product")
+    public ResponseEntity<ProductDto> addProduct(@RequestBody Product product) {
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ProductDto.from(userService.addProduct(product)));
+    }
+
+    @DeleteMapping("/product/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
+        userService.deleteProduct(id);
+
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }

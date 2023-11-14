@@ -278,4 +278,52 @@ public class UserService extends AbstractService<User, UserRepository> {
 
         return user;
     }
+
+    public Product addProduct(Product product) {
+        var user = findByEmail(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()
+        );
+
+        product.setUser(user);
+
+        var prod = productRepository.save(product);
+
+        user.getProducts().add(prod);
+
+        repository.save(user);
+
+        return prod;
+    }
+
+    public void deleteProduct(Long id) {
+        var user = findByEmail(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()
+        );
+
+        user.getProducts().stream()
+                .filter(product -> product.getId().equals(id))
+                .findAny()
+                .ifPresent(product -> {
+                    product.setUser(null);
+                    user.getProducts().remove(product);
+                    productRepository.delete(product);
+                });
+    }
+
+    public List<Product> showSellingProducts() {
+        var user = findByEmail(
+                SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getName()
+        );
+
+        return user.getProducts();
+    }
 }

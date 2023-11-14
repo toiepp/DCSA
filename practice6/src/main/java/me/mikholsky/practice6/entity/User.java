@@ -1,6 +1,7 @@
 package me.mikholsky.practice6.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -17,7 +18,7 @@ import java.util.List;
 @Table(name = "users")
 @Data
 @EqualsAndHashCode(callSuper = true)
-@ToString(exclude = {"cart", "orders"})
+@ToString(exclude = {"cart", "orders", "products"})
 public class User extends AbstractEntity implements UserDetails {
 
     private String firstName;
@@ -30,6 +31,10 @@ public class User extends AbstractEntity implements UserDetails {
 
     @Enumerated(EnumType.STRING)
     private Role role;
+
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user"})
+    private List<Product> products = new ArrayList<>();
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",
