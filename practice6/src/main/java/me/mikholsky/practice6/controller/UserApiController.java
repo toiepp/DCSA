@@ -65,7 +65,7 @@ public class UserApiController extends AbstractController<User, UserService> {
     @PostMapping("/{userId}/order")
     @Operation(summary = "Checkout order")
     public ResponseEntity<OrderDto> checkout(@PathVariable Long userId) {
-        OrderDto order = null;
+        OrderDto order;
         try {
             order = service.checkout(userId);
         } catch (NotEnoughInStorageException e) {
