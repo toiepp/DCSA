@@ -12,9 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/user")
-public class UserController extends AbstractController<User, UserService> {
-    public UserController(UserService service) {
+@RequestMapping("/api/user")
+public class UserApiController extends AbstractController<User, UserService> {
+    public UserApiController(UserService service) {
         super(service);
     }
 

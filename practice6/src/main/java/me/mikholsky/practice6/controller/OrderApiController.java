@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/order")
-public class OrderController extends AbstractController<Order, OrderService> {
-    public OrderController(OrderService service) {
+@RequestMapping("/api/order")
+public class OrderApiController extends AbstractController<Order, OrderService> {
+    public OrderApiController(OrderService service) {
         super(service);
     }
 }
