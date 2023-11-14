@@ -9,7 +9,10 @@ import me.mikholsky.practice6.entity.User;
 @Setter
 public class UserDto {
     private Long id;
-    private String name;
+    private String firstName;
+    private String lastName;
+    private String email;
+    private String role;
     private CartDto cartDto;
 
     public static UserDto from(User user) {
@@ -21,7 +24,10 @@ public class UserDto {
 
         return UserDto.builder()
                 .id(user.getId())
-                .name(user.getName())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .email(user.getEmail())
+                .role(user.getRole().name())
                 .cartDto(cartDto)
                 .build();
     }

@@ -15,8 +15,17 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @ToString(exclude = {"cart", "orders"})
 public class User extends AbstractEntity {
-    @Basic(optional = false)
-    private String name;
+
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
+    private String password;
+
+    @Enumerated(EnumType.STRING)
+    private Role role;
 
     @JsonIgnore
     @OneToMany(mappedBy = "user",
