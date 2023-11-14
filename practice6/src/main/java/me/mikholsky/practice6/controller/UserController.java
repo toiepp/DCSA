@@ -1,8 +1,6 @@
 package me.mikholsky.practice6.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.OrderDto;
 import me.mikholsky.practice6.controller.dto.UserDto;
@@ -11,7 +9,6 @@ import me.mikholsky.practice6.exception.NotEnoughInStorageException;
 import me.mikholsky.practice6.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 @RestController

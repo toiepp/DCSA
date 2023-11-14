@@ -4,7 +4,6 @@ import jakarta.transaction.Transactional;
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.CartRowDto;
 import me.mikholsky.practice6.controller.dto.OrderDto;
-import me.mikholsky.practice6.controller.dto.UserDto;
 import me.mikholsky.practice6.entity.*;
 import me.mikholsky.practice6.exception.NotEnoughInStorageException;
 import me.mikholsky.practice6.repository.OrderRepository;
@@ -13,7 +12,6 @@ import me.mikholsky.practice6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -91,7 +89,6 @@ public class UserService extends AbstractService<User, UserRepository> {
         return OrderDto.from(user, order);
     }
 
-    // TODO сделать уменьшение кол-ва хранимого товара на складе если заказ оформлен успешно
     public OrderDto checkout(Long id) throws NotEnoughInStorageException {
         var user = findById(id);
 

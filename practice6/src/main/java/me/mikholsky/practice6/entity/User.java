@@ -30,9 +30,6 @@ public class User extends AbstractEntity {
     private List<Order> orders = new ArrayList<>();
 
     public void addToCart(Product product, int quantity) {
-        // Вариант что надо новый подукт добавить
-        // Или добавить указанное количество к уже существующему
-
         var productInCart = cart.stream()
                 .filter(cartRow -> cartRow.getProduct().getId().equals(product.getId()))
                 .findFirst()
