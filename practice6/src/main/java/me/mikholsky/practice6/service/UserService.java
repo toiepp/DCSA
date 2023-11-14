@@ -4,12 +4,15 @@ import jakarta.transaction.Transactional;
 import me.mikholsky.practice6.controller.dto.CartDto;
 import me.mikholsky.practice6.controller.dto.CartRowDto;
 import me.mikholsky.practice6.controller.dto.OrderDto;
+import me.mikholsky.practice6.controller.dto.RegistrationRequestDto;
 import me.mikholsky.practice6.entity.*;
 import me.mikholsky.practice6.exception.NotEnoughInStorageException;
 import me.mikholsky.practice6.repository.OrderRepository;
 import me.mikholsky.practice6.repository.ProductRepository;
 import me.mikholsky.practice6.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +23,8 @@ public class UserService extends AbstractService<User, UserRepository> {
     private ProductRepository productRepository;
 
     private OrderRepository orderRepository;
+
+    private PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository repository) {
         super(repository);
@@ -35,6 +40,17 @@ public class UserService extends AbstractService<User, UserRepository> {
     public UserService setOrderRepository(OrderRepository orderRepository) {
         this.orderRepository = orderRepository;
         return this;
+    }
+
+    @Autowired
+    public UserService setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+        return this;
+    }
+
+    public User findByEmail(String email) throws UsernameNotFoundException {
+        return repository.findByEmail(email)
+                .orElseThrow(() -> new UsernameNotFoundException("No such user with email: " + email));
     }
 
     public CartDto showCart(Long id) {
@@ -132,5 +148,20 @@ public class UserService extends AbstractService<User, UserRepository> {
         return cart.stream()
                 .filter(row -> row.getQuantity() > row.getProduct().getAmount())
                 .toList();
+    }
+
+    public User register(RegistrationRequestDto requestDto) {
+        User user = new User();
+        user.setFirstName(requestDto.getFirstName());
+        user.setLastName(requestDto.getLastName());
+        user.setEmail(requestDto.getEmail());
+        user.setPassword(passwordEncoder.encode(requestDto.getPassword()));
+        if (requestDto.getRole() == null || requestDto.getRole().isBlank()) {
+            user.setRole(Role.USER);
+        } else {
+            user.setRole(Role.valueOf(requestDto.getRole().toUpperCase()));
+        }
+
+        return repository.save(user);
     }
 }
