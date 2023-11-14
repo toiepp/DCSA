@@ -11,6 +11,8 @@ import org.apache.logging.log4j.util.ProcessIdUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -69,20 +71,20 @@ public class UserController {
      *   1. Добавлять новые товары на маркетплейс
      *   2. Удалять только свои товары с маркетплейса */
 
-    @GetMapping("/product")
+    @GetMapping("/seller/product")
     public ResponseEntity<List<ProductDto>> showSellingProducts() {
         List<ProductDto> dtos = userService.showSellingProducts().stream().map(ProductDto::from).toList();
 
         return ResponseEntity.ok(dtos);
     }
 
-    @PostMapping("/product")
+    @PostMapping("/seller/product")
     public ResponseEntity<ProductDto> addProduct(@RequestBody Product product) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(ProductDto.from(userService.addProduct(product)));
     }
 
-    @DeleteMapping("/product/{id}")
+    @DeleteMapping("/seller/product/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable Long id) {
         userService.deleteProduct(id);
 

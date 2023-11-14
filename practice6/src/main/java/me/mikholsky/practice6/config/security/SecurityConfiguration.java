@@ -61,17 +61,12 @@ public class SecurityConfiguration {
                         request
                                 .requestMatchers("/auth/**")
                                 .permitAll()
-                                /* USER permissions
-                                *   1. Посмотреть все товары
-                                *   2. Любые манипуляции со своей корзиной
-                                *   3. Оформить заказ */
-
-                                /* SELLER permissions
-                                *   1. Добавление новых товаров на маркетплейс
-                                *   2. Удалять товары с маркетплейсa */
-
-                                /* ADMIN permissions
-                                *   1. Может все */
+                                .requestMatchers("/api/**")
+                                .hasAuthority("ADMIN")
+                                .requestMatchers("/user/seller/**")
+                                .hasAnyAuthority("SELLER", "ADMIN")
+                                .requestMatchers("/user/**")
+                                .hasAnyAuthority("USER", "SELLER", "ADMIN")
                                 .anyRequest()
                                 .authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
