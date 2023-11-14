@@ -1,7 +1,11 @@
-CREATE TABLE users
+CREATE TABLE if not exists users
 (
-    id   serial PRIMARY KEY,
-    name varchar not null
+    id         serial PRIMARY KEY,
+    first_name varchar(50),
+    last_name  varchar(100),
+    email      varchar(200) NOT NULL UNIQUE,
+    password   varchar(64)  NOT NULL,
+    role       varchar(20)  NOT NULL
 );
 
 create table products

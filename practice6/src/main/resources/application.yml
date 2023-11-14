@@ -4,7 +4,7 @@ spring:
   datasource:
     username: ecommerce_user
     password: ecommerce_password
-    url: jdbc:postgresql://db:5432/ecommerce_db
+    url: jdbc:postgresql://db-server:5432/ecommerce_db
     driver-class-name: org.postgresql.Driver
   jackson:
     serialization:
