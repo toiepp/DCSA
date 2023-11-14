@@ -1,8 +1,13 @@
 version: '3.8'
 
+networks:
+  main-net:
+    driver: bridge
+
 services:
   server:
     image: server:0.0.1
+    container_name: main-server
     restart: always
     build:
       context: .
@@ -11,8 +16,14 @@ services:
       - '8181:8181'
     depends_on:
       - db
+    networks:
+      - main-net
+    links:
+      - "db:database"
+      - "db:db-server"
   db:
     image: postgres:16.0-alpine
+    container_name: server-db
     restart: unless-stopped
     ports:
       - '5433:5432'
@@ -28,3 +39,5 @@ services:
       timeout: 5s
       retries: 5
       start_period: 10s
+    networks:
+      - main-net
