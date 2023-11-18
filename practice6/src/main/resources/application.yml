@@ -1,5 +1,8 @@
 server:
   port: 8181
+logging:
+  level:
+    org.springframework.security: TRACE
 spring:
   datasource:
     username: ecommerce_user

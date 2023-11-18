@@ -1,4 +1,4 @@
-package me.mikholsky.practice6.config.security;
+package me.mikholsky.practice6.config.security.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
